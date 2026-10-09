@@ -6,6 +6,8 @@ services:
     image: mysql:8.0
     container_name: sms-mysql
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-RootAdminSecurePass2026!}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-student_management}
@@ -14,7 +16,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-    # HARDENING: Không expose port 3306 ra host máy thật, chỉ mở nội bộ
+    # HARDENING 1: Network Isolation - Không expose port 3306 ra host máy thật
     networks:
       - backend-net
     healthcheck:
@@ -33,12 +35,15 @@ services:
       dockerfile: Dockerfile
     container_name: sms-app
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       NODE_ENV: production
       PORT: 3000
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
       MYSQL_DATABASE: ${MYSQL_DATABASE:-student_management}
+      # HARDENING 2: Least Privilege - Sử dụng user thường có quyền giới hạn
       MYSQL_USER: ${MYSQL_USER:-student_user}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-StudentAppSecurePass2026!}
     depends_on:
@@ -56,6 +61,8 @@ services:
     image: phpmyadmin:5.2-apache
     container_name: sms-phpmyadmin
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
@@ -74,6 +81,8 @@ services:
     image: nginx:1.27-alpine
     container_name: sms-nginx
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     ports:
       - "80:80"
       - "443:443"
@@ -94,6 +103,8 @@ services:
     image: prom/prometheus:v2.54.1
     container_name: sms-prometheus
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     ports:
       - "9090:9090"
     volumes:
@@ -114,6 +125,8 @@ services:
     image: grafana/grafana:11.2.0
     container_name: sms-grafana
     restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
     ports:
       - "3001:3000"
     environment:
@@ -127,6 +140,7 @@ services:
       - grafana_data:/var/lib/grafana
     depends_on:
       - prometheus
+      - loki
     networks:
       - monitoring-net
 
@@ -143,6 +157,7 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     devices:
       - /dev/kmsg
@@ -165,6 +180,44 @@ services:
       - backend-net
       - monitoring-net
 
+  # =========================================================
+  # 9. LƯU TRỮ VÀ TRUY VẤN LOG TẬP TRUNG (GRAFANA LOKI)
+  # =========================================================
+  loki:
+    image: grafana/loki:3.1.1
+    container_name: sms-loki
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./logging/loki/loki-config.yml:/etc/loki/local-config.yaml:ro
+      - loki_data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - monitoring-net
+
+  # =========================================================
+  # 10. THU THẬP LOG TẬP TRUNG (PROMTAIL)
+  # =========================================================
+  promtail:
+    image: grafana/promtail:3.1.1
+    container_name: sms-promtail
+    restart: unless-stopped
+    user: root
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - ./logging/promtail/promtail-config.yml:/etc/promtail/config.yml:ro
+      - nginx_logs:/var/log/nginx:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    networks:
+      - monitoring-net
+
 # =========================================================
 # MẠNG VÀ PHÂN VÙNG LƯU TRỮ (ISOLATION NETWORKS & VOLUMES)
 # =========================================================
@@ -181,3 +234,4 @@ volumes:
   nginx_logs:
   prometheus_data:
   grafana_data:
+  loki_data:

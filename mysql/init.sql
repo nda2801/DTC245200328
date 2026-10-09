@@ -108,7 +108,7 @@ DELIMITER ;
 
 -- 1. Lớp học mẫu
 INSERT INTO `classes` (`class_code`, `class_name`, `faculty`, `academic_year`) VALUES
-('CNTT-K23A', 'Công nghệ Thông tin K23A', 'Khoa Công nghệ Thông tin', '2023-2027'),
+('CNTT-K23B', 'Công nghệ Thông tin K23B', 'Khoa Công nghệ Thông tin', '2023-2027'),
 ('KTPM-K23B', 'Kỹ thuật Phần mềm K23B', 'Khoa Công nghệ Thông tin', '2023-2027'),
 ('HTTT-K23A', 'Hệ thống Thông tin K23A', 'Khoa Hệ thống Thông tin', '2023-2027'),
 ('ATTT-K23A', 'An toàn Thông tin K23A', 'Khoa An toàn Thông tin', '2023-2027');
@@ -123,7 +123,7 @@ INSERT INTO `subjects` (`subject_code`, `subject_name`, `credits`) VALUES
 
 -- 3. Sinh viên mẫu
 INSERT INTO `students` (`student_code`, `full_name`, `dob`, `gender`, `email`, `phone`, `class_id`, `status`) VALUES
-('DTC245200328', 'Nguyễn Văn An', '2005-04-12', 'Nam', 'an.nguyen@student.edu.vn', '0912345678', 1, 'Đang học'),
+('DTC245200328', 'Nguyễn Đức Anh', '2006-01-28', 'Nam', 'dtc245200328@ictu.edu.vn', '0373704050', 1, 'Đang học'),
 ('DTC245200329', 'Trần Thị Bình', '2005-08-25', 'Nữ', 'binh.tran@student.edu.vn', '0923456789', 1, 'Đang học'),
 ('DTC245200330', 'Lê Hoàng Cường', '2005-01-15', 'Nam', 'cuong.le@student.edu.vn', '0934567890', 2, 'Đang học'),
 ('DTC245200331', 'Phạm Minh Đức', '2004-11-30', 'Nam', 'duc.pham@student.edu.vn', '0945678901', 2, 'Đang học'),

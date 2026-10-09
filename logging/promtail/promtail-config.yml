@@ -1,0 +1,53 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  # 1. Thu thập Access Logs từ Nginx Reverse Proxy
+  - job_name: nginx-access
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx
+          log_type: access
+          service: reverse-proxy
+          __path__: /var/log/nginx/access.log
+    pipeline_stages:
+      - json:
+          expressions:
+            remote_addr: remote_addr
+            request_method: request_method
+            request_uri: request_uri
+            status: status
+            request_time: request_time
+      - labels:
+          request_method:
+          status:
+
+  # 2. Thu thập Error Logs từ Nginx Reverse Proxy
+  - job_name: nginx-error
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx
+          log_type: error
+          service: reverse-proxy
+          __path__: /var/log/nginx/error.log
+
+  # 3. Thu thập logs các container thông qua volume
+  - job_name: app-logs
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: student-app
+          service: backend-express
+          __path__: /var/log/app/*.log
