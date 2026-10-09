@@ -1,0 +1,132 @@
+<div class="row g-3 mb-4">
+  <div class="col-12">
+    <div class="p-4 bg-white rounded-3 shadow-sm border-start border-4 border-primary">
+      <h2 class="h4 fw-bold mb-1">Chào mừng đến với Hệ thống Quản lý Sinh viên</h2>
+      <p class="text-muted mb-0">Hệ thống triển khai theo mô hình Container hóa Docker Compose, bảo vệ bằng Nginx Reverse Proxy và giám sát toàn diện với Prometheus & Grafana Loki.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Stat Cards -->
+<div class="row g-3 mb-4">
+  <div class="col-md-3 col-sm-6">
+    <div class="card stat-card bg-primary text-white p-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h6 class="text-white-50 text-uppercase mb-1 small">Tổng Sinh Viên</h6>
+          <h2 class="fw-bold mb-0"><%= stats.totalStudents %></h2>
+        </div>
+        <i class="fa-solid fa-user-graduate fa-2x opacity-75"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 col-sm-6">
+    <div class="card stat-card bg-success text-white p-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h6 class="text-white-50 text-uppercase mb-1 small">Lớp Học</h6>
+          <h2 class="fw-bold mb-0"><%= stats.totalClasses %></h2>
+        </div>
+        <i class="fa-solid fa-chalkboard-user fa-2x opacity-75"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 col-sm-6">
+    <div class="card stat-card bg-warning text-dark p-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h6 class="text-dark-50 text-uppercase mb-1 small">Môn Học</h6>
+          <h2 class="fw-bold mb-0"><%= stats.totalSubjects %></h2>
+        </div>
+        <i class="fa-solid fa-book-open fa-2x opacity-75"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 col-sm-6">
+    <div class="card stat-card bg-info text-white p-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h6 class="text-white-50 text-uppercase mb-1 small">Điểm TB Hệ Thống</h6>
+          <h2 class="fw-bold mb-0"><%= stats.avgScore %>/10</h2>
+        </div>
+        <i class="fa-solid fa-star fa-2x opacity-75"></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Recent Students Table -->
+  <div class="col-lg-8">
+    <div class="card p-3">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0"><i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>Sinh Viên Mới Cập Nhật</h5>
+        <a href="/students" class="btn btn-sm btn-outline-primary">Xem tất cả</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Mã SV</th>
+              <th>Họ và Tên</th>
+              <th>Giới tính</th>
+              <th>Lớp</th>
+              <th>Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (recentStudents.length > 0) { %>
+              <% recentStudents.forEach(s => { %>
+                <tr>
+                  <td class="fw-bold"><%= s.student_code %></td>
+                  <td><%= s.full_name %></td>
+                  <td><%= s.gender %></td>
+                  <td><span class="badge bg-light text-dark border"><%= s.class_name || 'Chưa gán' %></span></td>
+                  <td>
+                    <% if (s.status === 'Đang học') { %>
+                      <span class="badge bg-success">Đang học</span>
+                    <% } else { %>
+                      <span class="badge bg-secondary"><%= s.status %></span>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <tr>
+                <td colspan="5" class="text-center text-muted py-3">Chưa có dữ liệu sinh viên</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grades Distribution -->
+  <div class="col-lg-4">
+    <div class="card p-3">
+      <h5 class="fw-bold mb-3"><i class="fa-solid fa-chart-pie me-2 text-success"></i>Thống Kê Điểm Chữ</h5>
+      <ul class="list-group list-group-flush">
+        <% gradeStats.forEach(g => { %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>Hạng <strong><%= g.letter_grade %></strong></span>
+            <span class="badge bg-primary rounded-pill"><%= g.count %> lượt</span>
+          </li>
+        <% }) %>
+      </ul>
+
+      <div class="mt-4 p-3 bg-light rounded-2 border">
+        <h6 class="fw-bold small text-uppercase text-secondary mb-2">Trạng thái hệ thống DevOps</h6>
+        <div class="d-flex flex-column gap-2 small">
+          <div><i class="fa-solid fa-circle-check text-success me-1"></i> Reverse Proxy: Nginx Port 80 & 443</div>
+          <div><i class="fa-solid fa-circle-check text-success me-1"></i> Database: MySQL 8.0 (Internal network)</div>
+          <div><i class="fa-solid fa-circle-check text-success me-1"></i> Metrics: Prometheus /metrics</div>
+          <div><i class="fa-solid fa-circle-check text-success me-1"></i> Logs: Promtail -> Grafana Loki</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

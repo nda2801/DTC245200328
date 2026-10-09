@@ -1,0 +1,73 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h3 class="fw-bold mb-1"><i class="fa-solid fa-award text-primary me-2"></i>Quản Lý Điểm Số</h3>
+    <p class="text-muted mb-0">Theo dõi kết quả học tập, điểm thành phần và điểm chữ theo học kỳ</p>
+  </div>
+  <a href="/grades/create" class="btn btn-primary">
+    <i class="fa-solid fa-plus me-1"></i> Nhập Điểm Mới
+  </a>
+</div>
+
+<div class="card p-3">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Mã SV</th>
+          <th>Sinh Viên</th>
+          <th>Môn Học</th>
+          <th>Chuyên cần (10%)</th>
+          <th>Giữa kỳ (30%)</th>
+          <th>Cuối kỳ (60%)</th>
+          <th>Điểm TB</th>
+          <th>Điểm Chữ</th>
+          <th>Học kỳ</th>
+          <th class="text-end">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (grades.length > 0) { %>
+          <% grades.forEach(g => { %>
+            <tr>
+              <td class="fw-bold"><%= g.student_code %></td>
+              <td><%= g.student_name %></td>
+              <td><span class="badge bg-light text-dark border"><%= g.subject_name %></span></td>
+              <td><%= g.attendance_score %></td>
+              <td><%= g.midterm_score %></td>
+              <td><%= g.final_score %></td>
+              <td class="fw-bold text-primary"><%= g.average_score %></td>
+              <td>
+                <% if (g.letter_grade === 'A') { %>
+                  <span class="badge bg-success">A (Giỏi)</span>
+                <% } else if (g.letter_grade === 'B') { %>
+                  <span class="badge bg-primary">B (Khá)</span>
+                <% } else if (g.letter_grade === 'C') { %>
+                  <span class="badge bg-warning text-dark">C (TB)</span>
+                <% } else if (g.letter_grade === 'D') { %>
+                  <span class="badge bg-secondary">D (TB Yếu)</span>
+                <% } else { %>
+                  <span class="badge bg-danger">F (Trượt)</span>
+                <% } %>
+              </td>
+              <td><small class="text-muted"><%= g.semester %></small></td>
+              <td class="text-end">
+                <a href="/grades/edit/<%= g.id %>" class="btn btn-sm btn-outline-primary" title="Sửa">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <form action="/grades/delete/<%= g.id %>" method="POST" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa điểm này?');">
+                  <button type="submit" class="btn btn-sm btn-outline-danger" title="Xóa">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="10" class="text-center text-muted py-4">Chưa có bản ghi điểm nào</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

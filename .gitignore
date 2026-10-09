@@ -1,0 +1,24 @@
+# Dependency & environment
+node_modules/
+.env
+
+# Build & Data
+mysql-data/
+grafana-data/
+loki-data/
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temp extraction files
+assignment_extracted.txt
+chapters_summary.txt
+
+# Local Agent & IDE files
+.agent/
+.agents/
+.claude/
+
