@@ -40,6 +40,9 @@ services:
       PORT: 3000
       NODE_ENV: production
       LOG_LEVEL: info
+    volumes:
+      - ./app/public:/usr/src/app/public:ro
+      - ./app/src:/usr/src/app/src:ro
     networks:
       - frontend_net
       - backend_net
@@ -140,6 +143,31 @@ services:
       - backend_net
       - monitoring_net
 
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: loki
+    restart: unless-stopped
+    command: -config.file=/etc/loki/loki-config.yaml
+    volumes:
+      - ./monitoring/loki/loki-config.yaml:/etc/loki/loki-config.yaml:ro
+      - loki_data:/loki
+    ports:
+      - "3100:3100"
+    networks:
+      - monitoring_net
+
+  promtail:
+    image: grafana/promtail:3.0.0
+    container_name: promtail
+    restart: unless-stopped
+    command: -config.file=/etc/promtail/promtail-config.yaml
+    volumes:
+      - ./monitoring/promtail/promtail-config.yaml:/etc/promtail/promtail-config.yaml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    networks:
+      - monitoring_net
+
 networks:
   frontend_net:
     driver: bridge
@@ -152,3 +180,4 @@ volumes:
   mysql_data:
   prometheus_data:
   grafana_data:
+  loki_data:
