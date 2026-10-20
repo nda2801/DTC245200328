@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hệ thống Quản lý Sinh viên & Điểm số - ICTU</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-badge">ICTU</div>
+        <div class="brand-info">
+          <h2>Quản lý Sinh viên</h2>
+          <span>Đại học CNTT & TT</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <button class="nav-item active" data-tab="overview">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+          <span>Tổng quan</span>
+        </button>
+        <button class="nav-item" data-tab="students">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+          <span>Quản lý Sinh viên</span>
+        </button>
+        <button class="nav-item" data-tab="classes">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+          <span>Quản lý Lớp học</span>
+        </button>
+        <button class="nav-item" data-tab="grades">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          <span>Quản lý Điểm số</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="system-status">
+          <span class="status-indicator online"></span>
+          <span>Nginx SSL • MySQL Active</span>
+        </div>
+        <div class="user-meta">
+          <span class="meta-label">Mã SV Thực hiện:</span>
+          <span class="meta-id">DTC245200328</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Navigation Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 id="page-title">Tổng quan Quản lý</h1>
+          <p id="page-subtitle">Hệ thống Quản lý Sinh viên & Học vụ - Đại học CNTT & Truyền thông</p>
+        </div>
+        <div class="topbar-right">
+          <div class="quick-links">
+            <a href="/pma/" target="_blank" class="badge-link pma-link" title="Mở phpMyAdmin Quản trị Database">
+              <span>phpMyAdmin</span>
+            </a>
+            <a href="http://localhost:3001" target="_blank" class="badge-link grafana-link" title="Mở Grafana Monitoring">
+              <span>Grafana :3001</span>
+            </a>
+            <a href="/metrics" target="_blank" class="badge-link metrics-link" title="Xem Prometheus Raw Metrics">
+              <span>/metrics</span>
+            </a>
+          </div>
+          <div class="profile-card">
+            <div class="avatar">AD</div>
+            <div class="profile-info">
+              <span class="profile-name">Admin Hệ thống</span>
+              <span class="profile-role">CNTT - K23B - ICTU</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Views -->
+      <div class="content-body">
+        
+        <!-- Tab 1: Overview -->
+        <section id="tab-overview" class="tab-panel active">
+          <!-- Metric KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">Tổng số Sinh viên</span>
+                <span class="kpi-icon icon-blue">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </span>
+              </div>
+              <div class="kpi-value" id="stat-students">0</div>
+              <div class="kpi-caption">Đang ghi nhận trên hệ thống</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">Tổng số Lớp học</span>
+                <span class="kpi-icon icon-emerald">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                </span>
+              </div>
+              <div class="kpi-value" id="stat-classes">0</div>
+              <div class="kpi-caption">Thuộc các khối chuyên ngành</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">Học phần Đào tạo</span>
+                <span class="kpi-icon icon-amber">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                </span>
+              </div>
+              <div class="kpi-value" id="stat-courses">0</div>
+              <div class="kpi-caption">Học phần tín chỉ tích lũy</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-header">
+                <span class="kpi-title">Điểm GPA Trung bình</span>
+                <span class="kpi-icon icon-indigo">
+                  <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z"></path></svg>
+                </span>
+              </div>
+              <div class="kpi-value" id="stat-gpa">0.00</div>
+              <div class="kpi-caption">Thang điểm tín chỉ 4.0</div>
+            </div>
+          </div>
+
+          <!-- Quick Action Banner & Distribution Stats -->
+          <div class="overview-grid">
+            <div class="card card-summary">
+              <div class="card-header">
+                <h3>Phổ Điểm Toàn Trường (Thang Chữ)</h3>
+              </div>
+              <div class="card-body" id="grade-distribution-container">
+                <div class="empty-state">Đang nạp dữ liệu thống kê...</div>
+              </div>
+            </div>
+
+            <div class="card card-summary">
+              <div class="card-header">
+                <h3>Tình Trạng Học Tập</h3>
+              </div>
+              <div class="card-body" id="status-distribution-container">
+                <div class="empty-state">Đang nạp dữ liệu thống kê...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Students Table Preview -->
+          <div class="card table-card">
+            <div class="card-header flex-between">
+              <h3>Danh sách Sinh viên Mới cập nhật</h3>
+              <button class="btn btn-primary" onclick="switchTab('students')">Xem toàn bộ danh sách &rarr;</button>
+            </div>
+            <div class="card-body table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Mã SV</th>
+                    <th>Họ và Tên</th>
+                    <th>Lớp</th>
+                    <th>Email</th>
+                    <th>Tình trạng</th>
+                    <th>GPA</th>
+                  </tr>
+                </thead>
+                <tbody id="overview-students-tbody">
+                  <tr><td colspan="6" class="text-center">Đang tải danh sách...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab 2: Students CRUD -->
+        <section id="tab-students" class="tab-panel">
+          <div class="toolbar">
+            <div class="search-box">
+              <input type="text" id="student-search-input" placeholder="Tìm theo Mã SV, Họ tên, Email...">
+              <button class="btn btn-secondary" id="student-search-btn">Tìm kiếm</button>
+            </div>
+            <div class="filter-group">
+              <select id="student-filter-class" class="form-select">
+                <option value="">-- Tất cả Lớp học --</option>
+              </select>
+              <select id="student-filter-status" class="form-select">
+                <option value="">-- Tất cả Trạng thái --</option>
+                <option value="Đang học">Đang học</option>
+                <option value="Bảo lưu">Bảo lưu</option>
+                <option value="Tốt nghiệp">Tốt nghiệp</option>
+              </select>
+              <button class="btn btn-primary" id="open-add-student-modal-btn">
+                <span>+ Thêm Sinh viên</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card table-card">
+            <div class="card-body table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Mã SV</th>
+                    <th>Họ và Tên</th>
+                    <th>Ngày sinh</th>
+                    <th>Giới tính</th>
+                    <th>Lớp học</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th>GPA</th>
+                    <th>Trạng thái</th>
+                    <th class="text-right">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="students-table-body">
+                  <tr><td colspan="10" class="text-center">Đang tải danh sách...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab 3: Classes CRUD -->
+        <section id="tab-classes" class="tab-panel">
+          <div class="toolbar flex-between">
+            <p class="section-desc">Quản lý cơ cấu các lớp học phần và lớp sinh hoạt chuyên ngành thuộc các khoa.</p>
+            <button class="btn btn-primary" id="open-add-class-modal-btn">
+              <span>+ Thêm Lớp học</span>
+            </button>
+          </div>
+
+          <div class="card table-card">
+            <div class="card-body table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Mã Lớp</th>
+                    <th>Tên Lớp học</th>
+                    <th>Khoa Quản lý</th>
+                    <th>Niên khóa</th>
+                    <th>Sĩ số hiện tại / Tối đa</th>
+                    <th class="text-right">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="classes-table-body">
+                  <tr><td colspan="6" class="text-center">Đang tải dữ liệu lớp học...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tab 4: Grades CRUD -->
+        <section id="tab-grades" class="tab-panel">
+          <div class="toolbar flex-between">
+            <p class="section-desc">Quản lý kết quả học tập, công thức tính điểm tích lũy tín chỉ theo Quy chế đào tạo.</p>
+            <button class="btn btn-primary" id="open-add-grade-modal-btn">
+              <span>+ Nhập Điểm Học phần</span>
+            </button>
+          </div>
+
+          <div class="card table-card">
+            <div class="card-body table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Mã SV</th>
+                    <th>Họ và Tên</th>
+                    <th>Lớp</th>
+                    <th>Môn học</th>
+                    <th>Tín chỉ</th>
+                    <th>CC (10%)</th>
+                    <th>GK (30%)</th>
+                    <th>CK (60%)</th>
+                    <th>Tổng kết (Hệ 10)</th>
+                    <th>Điểm chữ</th>
+                    <th>GPA (Hệ 4)</th>
+                    <th class="text-right">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="grades-table-body">
+                  <tr><td colspan="12" class="text-center">Đang tải bảng điểm...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal: Student Form (Create / Edit) -->
+  <div id="student-modal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="student-modal-title">Thêm Sinh viên Mới</h3>
+        <button class="modal-close-btn" onclick="closeModal('student-modal')">&times;</button>
+      </div>
+      <form id="student-form" class="modal-body">
+        <input type="hidden" id="student-form-id">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="student-code">Mã số Sinh viên (MSSV) *</label>
+            <input type="text" id="student-code" required placeholder="Ví dụ: DTC245200328">
+          </div>
+          <div class="form-group">
+            <label for="student-name">Họ và Tên *</label>
+            <input type="text" id="student-name" required placeholder="Nguyễn Văn A">
+          </div>
+          <div class="form-group">
+            <label for="student-birth">Ngày sinh *</label>
+            <input type="date" id="student-birth" required>
+          </div>
+          <div class="form-group">
+            <label for="student-gender">Giới tính *</label>
+            <select id="student-gender" required>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="student-class">Lớp trực thuộc *</label>
+            <select id="student-class" required>
+              <option value="">-- Chọn Lớp học --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="student-status">Tình trạng học tập *</label>
+            <select id="student-status" required>
+              <option value="Đang học">Đang học</option>
+              <option value="Bảo lưu">Bảo lưu</option>
+              <option value="Tốt nghiệp">Tốt nghiệp</option>
+            </select>
+          </div>
+          <div class="form-group full-width">
+            <label for="student-email">Địa chỉ Email *</label>
+            <input type="email" id="student-email" required placeholder="sinhvien@ictu.edu.vn">
+          </div>
+          <div class="form-group full-width">
+            <label for="student-phone">Số điện thoại *</label>
+            <input type="tel" id="student-phone" required placeholder="0912345678">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('student-modal')">Hủy bỏ</button>
+          <button type="submit" class="btn btn-primary" id="student-submit-btn">Lưu dữ liệu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Class Form (Create / Edit) -->
+  <div id="class-modal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="class-modal-title">Thêm Lớp học Mới</h3>
+        <button class="modal-close-btn" onclick="closeModal('class-modal')">&times;</button>
+      </div>
+      <form id="class-form" class="modal-body">
+        <input type="hidden" id="class-form-id">
+        <div class="form-group">
+          <label for="class-code">Mã Lớp *</label>
+          <input type="text" id="class-code" required placeholder="CNTT-K23B">
+        </div>
+        <div class="form-group">
+          <label for="class-name">Tên Lớp học *</label>
+          <input type="text" id="class-name" required placeholder="Công nghệ Thông tin K23B">
+        </div>
+        <div class="form-group">
+          <label for="class-faculty">Khoa Quản lý *</label>
+          <input type="text" id="class-faculty" required placeholder="Công nghệ Thông tin">
+        </div>
+        <div class="form-group">
+          <label for="class-year">Niên khóa *</label>
+          <input type="text" id="class-year" required placeholder="2024-2028">
+        </div>
+        <div class="form-group">
+          <label for="class-max">Sĩ số tối đa</label>
+          <input type="number" id="class-max" value="50" min="10" max="150">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('class-modal')">Hủy</button>
+          <button type="submit" class="btn btn-primary">Lưu lớp học</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Grade Form -->
+  <div id="grade-modal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="grade-modal-title">Nhập Điểm Học phần cho Sinh viên</h3>
+        <button class="modal-close-btn" onclick="closeModal('grade-modal')">&times;</button>
+      </div>
+      <form id="grade-form" class="modal-body">
+        <input type="hidden" id="grade-form-id">
+        <div class="form-group">
+          <label for="grade-student-select">Sinh viên *</label>
+          <select id="grade-student-select" required>
+            <option value="">-- Chọn Sinh viên --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="grade-course-select">Học phần môn học *</label>
+          <select id="grade-course-select" required>
+            <option value="">-- Chọn Môn học --</option>
+          </select>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="grade-att">Điểm Chuyên cần (10%) *</label>
+            <input type="number" step="0.1" min="0" max="10" id="grade-att" required placeholder="0.0 - 10.0">
+          </div>
+          <div class="form-group">
+            <label for="grade-mid">Điểm Giữa kỳ (30%) *</label>
+            <input type="number" step="0.1" min="0" max="10" id="grade-mid" required placeholder="0.0 - 10.0">
+          </div>
+          <div class="form-group full-width">
+            <label for="grade-fin">Điểm Cuối kỳ (60%) *</label>
+            <input type="number" step="0.1" min="0" max="10" id="grade-fin" required placeholder="0.0 - 10.0">
+          </div>
+        </div>
+        <div class="grade-preview-box">
+          <div class="preview-item">
+            <span>Tổng kết dự kiến:</span>
+            <strong id="preview-total">-</strong>
+          </div>
+          <div class="preview-item">
+            <span>Điểm chữ:</span>
+            <strong id="preview-letter">-</strong>
+          </div>
+          <div class="preview-item">
+            <span>GPA (Hệ 4):</span>
+            <strong id="preview-gpa">-</strong>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('grade-modal')">Hủy</button>
+          <button type="submit" class="btn btn-primary">Lưu bảng điểm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

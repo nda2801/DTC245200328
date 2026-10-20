@@ -1,0 +1,43 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+*.env
+
+# Documentation directory and generated reports (Keep GitHub repo clean)
+docs/
+*.docx
+*.pdf
+
+# Temporary files and scratch scripts
+scratch/
+scratch_*
+tmp/
+temp/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Node dependencies
+node_modules/
+dist/
+
+# Database persistence volumes
+mysql_data/
+prometheus_data/
+grafana_data/
+loki_data/
+
+# SSL certificates and private keys
+nginx/certs/*.key
+nginx/certs/*.crt
+nginx/certs/*.csr
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
