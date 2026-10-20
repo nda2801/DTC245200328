@@ -1,0 +1,12 @@
+apiVersion: 1
+
+providers:
+  - name: 'Student System Monitoring'
+    orgId: 1
+    folder: 'Hệ thống Quản lý Sinh viên'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 15
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/dashboards

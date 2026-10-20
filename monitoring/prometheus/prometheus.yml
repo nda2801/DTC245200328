@@ -1,0 +1,31 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'student-system-monitor'
+    environment: 'production'
+
+scrape_configs:
+  - job_name: 'student_webapp'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['student_webapp:3000']
+        labels:
+          app: 'student-webapp'
+          role: 'backend-api'
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+        labels:
+          infrastructure: 'container-engine'
+
+  - job_name: 'mysqld_exporter'
+    static_configs:
+      - targets: ['mysqld_exporter:9104']
+        labels:
+          service: 'mysql-database'
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
